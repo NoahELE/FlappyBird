@@ -1,0 +1,65 @@
+@startuml
+class ShadowFlap {
+	- WIDTH: int
+	- HEIGHT: int
+	- background: Image
+	- level0Bakcground: Image
+	- level1Bakcground: Image
+	- font: Font
+	- pipes[]: Pipe[]
+	- bird: Bird
+	- score: int
+	- started: boolean
+	- birdPassPipe: boolean
+	- win: boolean
+	-lose: boolean
+
+	- update()
+	+ main(args: String[]) {static}
+}
+class Pipe {
+    - GAP: int {static}
+    - STEP_SIZE: int
+	- image: Image
+	- upright: boolean
+	- x: double
+	- y: double
+
+	+ getRandomPos(): double {static}
+	+ draw()
+	+ getImage(): Image
+	+ getX(): double
+	+ move()
+	+ isOutOfBound(): boolean
+	+ getRect(): Rectangle
+}
+class Bird {
+	- birdWingUp: Image
+	- birdWingdown: Image
+	- x: double
+	- y: double
+	- image: Image
+	- wingcounter: int
+	- speed: double
+
+	+ getX(): double
+	+ draw()
+	+ fall()
+	+ fly()
+	+ move()
+	+ isOutOfBound(): boolean
+	+ collideWith(pipe: Pipe): boolean
+	+ getRect(): Rectangle
+}
+abstract class Weapon {
+
+}
+
+ShadowFlap ..> Bird
+ShadowFlap ..> Pipe
+Bird ..> ShadowFlap
+Pipe ..> ShadowFlap
+Bird ..> Pipe
+Pipe "2" <--* "1" ShadowFlap
+Bird "1" <--* "1" ShadowFlap
+@enduml
