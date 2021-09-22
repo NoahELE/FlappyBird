@@ -31,13 +31,17 @@ public class ShadowFlap extends AbstractGame {
     private int score;
     private int level;
     private int pipeSpawningCounter;
+    private int pipeSpawningInterval;
+    private int timescale;
 
     public ShadowFlap() {
         super(WIDTH, HEIGHT, "ShadowFlap");
         level = 0;
         background = new Image("res/level-0/background.png");
         pipes = new LinkedList<>();
-        pipeSpawningCounter = 0;
+        pipeSpawningInterval = 100;
+        pipeSpawningCounter = pipeSpawningInterval;
+        timescale = 1;
         bird = new Bird(200, 350, level, LEVEL0_MAX_LIFE);
         started = false;
         win = false;
@@ -113,8 +117,20 @@ public class ShadowFlap extends AbstractGame {
                 bird.setY(350);
             }
             // pipes
+            if (input.wasPressed(Keys.K)) {
+                if (timescale > 1) {
+                    timescale--;
+                    Pipe.setStepSize(Pipe.getStepSize() * 0.5);
+                }
+            }
+            if (input.wasPressed(Keys.L)) {
+                if (timescale < 5) {
+                    timescale++;
+                    Pipe.setStepSize(Pipe.getStepSize() * 1.5);
+                }
+            }
             pipeSpawningCounter++;
-            if (pipeSpawningCounter == 100) {
+            if (pipeSpawningCounter >= pipeSpawningInterval) {
                 double pos = Pipe.getRandomPos(level);
                 pipes.offer(new Pipe[] {
                         new Pipe(false, pos, 0),

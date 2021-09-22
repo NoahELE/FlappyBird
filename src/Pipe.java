@@ -5,14 +5,13 @@ import bagel.util.Rectangle;
 
 public class Pipe {
     public static final int GAP = 168;
-    private final int STEP_SIZE = 5;
+    private static double stepSize = 3;
     private final Image image;
     private final boolean upright;
     private final int type;
     private final double y;
     private double x;
     private boolean passedByBird;
-
     private boolean collideWithBird;
 
     public Pipe(boolean upright, double height, int type) {
@@ -54,7 +53,7 @@ public class Pipe {
     }
 
     public void move() {
-        x -= STEP_SIZE;
+        x -= stepSize;
     }
 
     public boolean isOutOfBound() {
@@ -83,6 +82,14 @@ public class Pipe {
 
     public void setPassedByBird(boolean passedByBird) {
         this.passedByBird = passedByBird;
+    }
+
+    public static double getStepSize() {
+        return stepSize;
+    }
+
+    public static void setStepSize(double stepSize) {
+        Pipe.stepSize = stepSize;
     }
 
     public Rectangle getRect() {
