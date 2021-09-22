@@ -8,17 +8,29 @@ public class Pipe {
     private final int STEP_SIZE = 5;
     private final Image image;
     private final boolean upright;
+    private final int type;
     private final double y;
     private double x;
+    private boolean passedByBird;
 
-    public Pipe(boolean upright, double height) {
-        image = new Image("res/pipe.png");
+    private boolean collideWithBird;
+
+    public Pipe(boolean upright, double height, int type) {
+        this.type = type; // 0 is plastic, 1 is steel
+        if (type == 0) {
+            image = new Image("res/level/plasticPipe.png");
+        } else {
+            image = new Image("res/level-1/steelPipe.png");
+        }
         this.upright = upright;
         x = ShadowFlap.WIDTH;
         y = upright ? height : (height - image.getHeight());
+        passedByBird = false;
+        collideWithBird = false;
     }
 
     public static double getRandomPos(int level) {
+        // generate random position for pipe pair for different level
         if (level == 0) {
             double r = Math.random() * 3;
             if (r < 1) {
@@ -31,14 +43,6 @@ public class Pipe {
         } else {
             return 100 + 400 * Math.random();
         }
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    public double getX() {
-        return x;
     }
 
     public void draw() {
@@ -55,6 +59,30 @@ public class Pipe {
 
     public boolean isOutOfBound() {
         return this.x < -image.getWidth();
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public boolean getCollideWithBird() {
+        return collideWithBird;
+    }
+
+    public void setCollideWithBird(boolean collideWithBird) {
+        this.collideWithBird = collideWithBird;
+    }
+
+    public boolean getPassedByBird() {
+        return passedByBird;
+    }
+
+    public void setPassedByBird(boolean passedByBird) {
+        this.passedByBird = passedByBird;
     }
 
     public Rectangle getRect() {

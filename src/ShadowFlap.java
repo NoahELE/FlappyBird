@@ -15,33 +15,35 @@ public class ShadowFlap extends AbstractGame {
     public static final int HEIGHT = 768;
     public final int LEVEL0_MAX_SCORE = 10;
     public final int LEVEL1_MAX_SCORE = 30;
+    public final int LEVEL0_MAX_LIFE = 3;
+    public final int LEVEL1_MAX_LIFE = 6;
+    private final Image fullLife = new Image("res/level/fullLife.png");
+    private final Image noLife = new Image("res/level/noLife.png");
     private Image background;
-    private final Image level0Background = new Image("res/level-0/background");
-    private final Image level1Background = new Image("res/level-1/background");
     private final Font font = new Font("res/font/slkscr.ttf", 48);
-    private final Queue<Pipe[]> pipes;
-    private final Bird bird;
+    private Queue<Pipe[]> pipes;
+    private Bird bird;
     private boolean started;
-    private boolean birdPassPipe;
     private boolean win;
     private boolean lose;
+    private boolean levelUp;
+    private int levelUpCounter;
     private int score;
     private int level;
+    private int pipeSpawningCounter;
 
     public ShadowFlap() {
         super(WIDTH, HEIGHT, "ShadowFlap");
-        pipes = new LinkedList<>();
         level = 0;
-        double pos = Pipe.getRandomPos(level);
-        pipes.offer(new Pipe[] {
-                new Pipe(false, pos),
-                new Pipe(true, pos + Pipe.GAP)
-        });
-        bird = new Bird(200, 350, level);
+        background = new Image("res/level-0/background.png");
+        pipes = new LinkedList<>();
+        pipeSpawningCounter = 0;
+        bird = new Bird(200, 350, level, LEVEL0_MAX_LIFE);
         started = false;
-        birdPassPipe = false;
         win = false;
         lose = false;
+        levelUp = false;
+        levelUpCounter = 0;
         score = 0;
     }
 
@@ -59,18 +61,13 @@ public class ShadowFlap extends AbstractGame {
      */
     @Override
     public void update(Input input) {
+        // score detection
         if (level == 0 && score >= LEVEL0_MAX_SCORE) {
-            level = 1;
-            score = 0;
+            levelUp = true;
         } else if (level == 1 && score >= LEVEL1_MAX_SCORE) {
             win = true;
         }
-        // figure out the right background
-        if (level == 0) {
-            background = level0Background;
-        } else if (level == 1) {
-            background = level1Background;
-        }
+        // draw background
         background.drawFromTopLeft(0, 0);
         // game logic
         if (input.wasPressed(Keys.ESCAPE)) {
@@ -92,18 +89,18 @@ public class ShadowFlap extends AbstractGame {
             font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
             s = "FINAL SCORE: " + score;
             font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2 + 75);
-        } else if (level == 0) {
-            // pipes
-            pipes[0].move();
-            pipes[1].move();
-            if (pipes[0].isOutOfBound()) {
-                double pos = Pipe.getRandomPos();
-                pipes[0] = new Pipe(false, pos);
-                pipes[1] = new Pipe(true, pos + Pipe.GAP);
-                birdPassPipe = false;
+        } else if (levelUp) {
+            String s = "LEVEL-UP!";
+            font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
+            if (levelUpCounter == 20) {
+                level = 1;
+                background = new Image("res/level-1/background.png");
+                bird = new Bird(200, 350, level, LEVEL1_MAX_LIFE);
+                pipes = new LinkedList<>();
+                levelUp = false;
             }
-            pipes[0].draw();
-            pipes[1].draw();
+            levelUpCounter++;
+        } else if (level == 0) {
             // bird
             bird.fall();
             if (input.wasPressed(Keys.SPACE)) {
@@ -111,18 +108,65 @@ public class ShadowFlap extends AbstractGame {
             }
             bird.move();
             bird.draw();
-            if (bird.collideWith(pipes[0]) || bird.collideWith(pipes[1]) || bird.isOutOfBound()) {
-                lose = true;
+            if (bird.isOutOfBound()) {
+                bird.loseLife();
+                bird.setY(350);
+            }
+            // pipes
+            pipeSpawningCounter++;
+            if (pipeSpawningCounter == 100) {
+                double pos = Pipe.getRandomPos(level);
+                pipes.offer(new Pipe[] {
+                        new Pipe(false, pos, 0),
+                        new Pipe(true, pos + Pipe.GAP, 0)
+                });
+                pipeSpawningCounter = 0;
+            }
+            for (Pipe[] pipePair : pipes) {
+                pipePair[0].move();
+                pipePair[1].move();
+                pipePair[0].draw();
+                pipePair[1].draw();
+                if (!pipePair[0].getCollideWithBird() && bird.collideWith(pipePair[0])) {
+                    pipePair[0].setCollideWithBird(true);
+                    bird.loseLife();
+                }
+                if (!pipePair[1].getCollideWithBird() && bird.collideWith(pipePair[1])) {
+                    pipePair[1].setCollideWithBird(true);
+                    bird.loseLife();
+                }
+                // score
+                if (!pipePair[0].getPassedByBird() &&
+                        pipePair[0].getX() + pipePair[0].getImage().getWidth() < bird.getX()) {
+                    score++;
+                    pipePair[0].setPassedByBird(true);
+                    pipePair[1].setPassedByBird(true);
+                }
+            }
+            // test if the leftmost pipes are out of screen
+            if (pipes.peek() != null && pipes.peek()[0].isOutOfBound()) {
+                pipes.poll();
+            }
+            if (bird.getLives() <= 0) {
                 win = false;
+                lose = true;
             }
-            // score
-            if (!birdPassPipe && pipes[0].getX() + pipes[0].getImage().getWidth() < bird.getX()) {
-                win = true;
-                birdPassPipe = true;
-                score++;
-            }
+            // draw score
             font.drawString("SCORE: " + score, 100, 100);
+            // draw life bar
+            double startX = 100;
+            double lifeWidth = fullLife.getWidth();
+            for (int i = 0; i < bird.getLives(); i++) {
+                fullLife.drawFromTopLeft(startX, 15);
+                startX += 50 + lifeWidth;
+            }
+            for (int i = 0; i < LEVEL0_MAX_LIFE - bird.getLives(); i++) {
+                noLife.drawFromTopLeft(startX, 15);
+                startX += 50 + lifeWidth;
+            }
+        } else if (level == 1) {
+            String s = "LEVEL-1!";
+            font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
         }
-
     }
 }

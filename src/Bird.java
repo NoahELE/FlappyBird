@@ -12,25 +12,20 @@ public class Bird {
     private double speed;
     private int lives;
 
-    public Bird(double x, double y, int level) {
+    public Bird(double x, double y, int level, int lives) {
         this.x = x;
         this.y = y;
         if (level == 0) {
-            birdWingDown = new Image("res/level-0/birdWingDown");
-            birdWingUp = new Image("res/level-0/birdWingUp");
-            lives = 3;
+            birdWingDown = new Image("res/level-0/birdWingDown.png");
+            birdWingUp = new Image("res/level-0/birdWingUp.png");
         } else {
-            birdWingDown = new Image("res/level-1/birdWingDown");
-            birdWingUp = new Image("res/level-1/birdWingUp");
-            lives = 6;
+            birdWingDown = new Image("res/level-1/birdWingDown.png");
+            birdWingUp = new Image("res/level-1/birdWingUp.png");
         }
+        this.lives = lives;
         image = birdWingDown;
         wingCounter = 0;
         speed = 0;
-    }
-
-    public double getX() {
-        return x;
     }
 
     public void draw() {
@@ -67,6 +62,22 @@ public class Bird {
 
     public boolean collideWith(Pipe pipe) {
         return getRect().intersects(pipe.getRect());
+    }
+
+    public void loseLife() {
+        lives--;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setY(double d) {
+        y = d;
     }
 
     public Rectangle getRect() {

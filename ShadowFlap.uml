@@ -2,21 +2,27 @@
 class ShadowFlap {
 	- WIDTH: int
 	- HEIGHT: int
+	- LEVEL0_MAX_SCORE: int
+	- LEVEL1_MAX_SCORE: int
 	- background: Image
-	- level0Bakcground: Image
-	- level1Bakcground: Image
 	- font: Font
-	- pipes[]: Pipe[]
+	- pipes: Queue<Pipe>
 	- bird: Bird
+	- win: boolean
+	- lose: boolean
+	- levelUp: boolean
+	- levelUpCounter: int
 	- score: int
+	- pipeSpawningCounter: int
 	- started: boolean
 	- birdPassPipe: boolean
-	- win: boolean
-	-lose: boolean
+
+	+ ShadowFlap()
 
 	- update()
 	+ main(args: String[]) {static}
 }
+
 class Pipe {
     - GAP: int {static}
     - STEP_SIZE: int
@@ -24,15 +30,21 @@ class Pipe {
 	- upright: boolean
 	- x: double
 	- y: double
+	- passedByBird: boolean
+
+	+ Pipe(upright: boolean, height: double, type: int)
 
 	+ getRandomPos(): double {static}
 	+ draw()
-	+ getImage(): Image
-	+ getX(): double
 	+ move()
 	+ isOutOfBound(): boolean
+	+ getImage(): Image
+	+ getX(): double
+	+ setPassedByBird(b: boolean)
+	+ getPassedByBird(): boolean
 	+ getRect(): Rectangle
 }
+
 class Bird {
 	- birdWingUp: Image
 	- birdWingdown: Image
@@ -49,8 +61,10 @@ class Bird {
 	+ move()
 	+ isOutOfBound(): boolean
 	+ collideWith(pipe: Pipe): boolean
+	+ loseLife()
 	+ getRect(): Rectangle
 }
+
 abstract class Weapon {
 
 }
