@@ -11,6 +11,7 @@ public class Bird {
     private double y;
     private double speed;
     private int lives;
+    private Weapon weapon = null;
 
     public Bird(double x, double y, int level, int lives) {
         this.x = x;
@@ -54,6 +55,14 @@ public class Bird {
 
     public void move() {
         y += speed;
+    }
+
+    public boolean touchWeapon(Weapon weapon) {
+        if (getRect().intersects(weapon.getRect())) {
+            this.weapon = weapon;
+            return true;
+        }
+        return false;
     }
 
     public boolean isOutOfBound() {

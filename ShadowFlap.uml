@@ -23,14 +23,16 @@ class ShadowFlap {
 	+ main(args: String[]) {static}
 }
 
-class Pipe {
+abstarct class Pipe {
     - GAP: int {static}
-    - STEP_SIZE: int
+    - stepSize: int {static}
 	- image: Image
 	- upright: boolean
+	- type: int
 	- x: double
 	- y: double
 	- passedByBird: boolean
+	- collideWithBird: boolean
 
 	+ Pipe(upright: boolean, height: double, type: int)
 
@@ -40,21 +42,49 @@ class Pipe {
 	+ isOutOfBound(): boolean
 	+ getImage(): Image
 	+ getX(): double
-	+ setPassedByBird(b: boolean)
+	+ getCollideWithBird(): boolean
+	+ setCollideWithBird(collideWithBird: boolean)
 	+ getPassedByBird(): boolean
+	+ setPassedByBird(passedByBird: boolean)
+	+ getStepSize(): double {static}
+	+ setStepSize(stepSize: double)
 	+ getRect(): Rectangle
+}
+
+class PlasticPipe extends Pipe {}
+
+class SteelPipe extends Pipe {
+	- flameCounter: int
+
+	+ SteelPipe(upright: boolean, height: double)
+
+	+ shootFlame()
+}
+
+class Flame {
+	- image: Image
+	- speed: double
+	- upward: boolean
+
+	+ Flame()
+
+	- move()
+	- isOutofBorder(): boolean
 }
 
 class Bird {
 	- birdWingUp: Image
 	- birdWingdown: Image
+	- image: Image
 	- x: double
 	- y: double
 	- image: Image
 	- wingcounter: int
 	- speed: double
+	- lives: int
 
-	+ getX(): double
+	+ Bird(x: double, y: double, level: int, lives: int)
+
 	+ draw()
 	+ fall()
 	+ fly()
@@ -62,11 +92,33 @@ class Bird {
 	+ isOutOfBound(): boolean
 	+ collideWith(pipe: Pipe): boolean
 	+ loseLife()
+	+ getLives(): int
+	+ getX(): double
+	+ setY(d: double)
 	+ getRect(): Rectangle
 }
 
 abstract class Weapon {
+	- x: double
+	- y: double
+	- MOVE_SPEED: double {static}
+	- SHOOT_SPEED: double {static}
+	- image: Image
 
+	+ Weapon(y: double)
+
+	+ isOutOfBorder(): boolean
+	+ move()
+	+ shoot()
+	+ getRect(): Rectangle
+}
+
+class Rock extends Weapon {
+	+ RANGE: double {static}
+}
+
+class Bomb extends Weapon {
+	+ RANGE: double {static}
 }
 
 ShadowFlap ..> Bird
@@ -76,4 +128,10 @@ Pipe ..> ShadowFlap
 Bird ..> Pipe
 Pipe "2" <--* "1" ShadowFlap
 Bird "1" <--* "1" ShadowFlap
+ShadowFlap ..> Weapon
+Weapon ..> ShadowFlap
+Weapon "n" <--* "1" ShadowFlap
+Weapon ..> Bird
+SteelPipe ..> Flame
+Flame "0..n" <--* "1" ShadowFlap
 @enduml

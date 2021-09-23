@@ -3,27 +3,22 @@ import bagel.Image;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
-public class Pipe {
-    public static final int GAP = 168;
-    private static double stepSize = 3;
-    private final Image image;
-    private final boolean upright;
-    private final int type;
-    private final double y;
-    private double x;
-    private boolean passedByBird;
-    private boolean collideWithBird;
+import java.util.IllegalFormatWidthException;
 
-    public Pipe(boolean upright, double height, int type) {
-        this.type = type; // 0 is plastic, 1 is steel
-        if (type == 0) {
-            image = new Image("res/level/plasticPipe.png");
-        } else {
-            image = new Image("res/level-1/steelPipe.png");
-        }
+public abstract class Pipe {
+    public static final int GAP = 168;
+    protected static double stepSize = 3;
+    protected final boolean upright;
+    protected double x;
+    protected boolean passedByBird;
+    protected boolean collideWithBird;
+    protected Image image;
+    protected double y;
+
+
+    public Pipe(boolean upright) {
         this.upright = upright;
         x = ShadowFlap.WIDTH;
-        y = upright ? height : (height - image.getHeight());
         passedByBird = false;
         collideWithBird = false;
     }
@@ -44,6 +39,10 @@ public class Pipe {
         }
     }
 
+    public void move() {
+        x -= stepSize;
+    }
+
     public void draw() {
         DrawOptions opt = new DrawOptions();
         if (upright) {
@@ -52,20 +51,12 @@ public class Pipe {
         image.drawFromTopLeft(x, y, opt);
     }
 
-    public void move() {
-        x -= stepSize;
-    }
-
-    public boolean isOutOfBound() {
-        return this.x < -image.getWidth();
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
     public double getX() {
         return x;
+    }
+
+    public double getY() {
+        return y;
     }
 
     public boolean getCollideWithBird() {
@@ -94,5 +85,13 @@ public class Pipe {
 
     public Rectangle getRect() {
         return image.getBoundingBoxAt(new Point(x + image.getWidth() / 2, y + image.getHeight() / 2));
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public boolean isOutOfBound() {
+        return this.x < -image.getWidth();
     }
 }
