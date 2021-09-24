@@ -12,6 +12,10 @@ import java.util.Queue;
  * @author: Xinhao Chen
  */
 public class ShadowFlap extends AbstractGame {
+    enum State {
+        NOT_STARTED, WIN, LOSE, LEVELUP, LEVEL
+    }
+
     public static final int WIDTH = 1024;
     public static final int HEIGHT = 768;
     public final int LEVEL0_MAX_SCORE = 3;
@@ -25,10 +29,7 @@ public class ShadowFlap extends AbstractGame {
     private Queue<Pipe[]> pipes;
     private List<Weapon> weapons;
     private Bird bird;
-    private boolean started;
-    private boolean win;
-    private boolean lose;
-    private boolean levelUp;
+    private State state;
     private int levelUpCounter;
     private int score;
     private int level;
@@ -45,10 +46,7 @@ public class ShadowFlap extends AbstractGame {
         pipeSpawningCounter = pipeSpawningInterval;
         timescale = 1;
         bird = new Bird(200, 350, level, LEVEL0_MAX_LIFE);
-        started = false;
-        win = false;
-        lose = false;
-        levelUp = false;
+        state = State.NOT_STARTED;
         levelUpCounter = 0;
         score = 0;
     }
@@ -69,9 +67,9 @@ public class ShadowFlap extends AbstractGame {
     public void update(Input input) {
         // score detection
         if (level == 0 && score >= LEVEL0_MAX_SCORE) {
-            levelUp = true;
+            state = State.LEVELUP;
         } else if (level == 1 && score >= LEVEL1_MAX_SCORE) {
-            win = true;
+            state = State.WIN;
         }
         // draw background
         background.drawFromTopLeft(0, 0);
@@ -79,114 +77,160 @@ public class ShadowFlap extends AbstractGame {
         if (input.wasPressed(Keys.ESCAPE)) {
             Window.close();
         }
-        if (!started) {
-            String s = "PRESS SPACE TO START";
-            font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
-            if (input.wasPressed(Keys.SPACE)) {
-                started = true;
-            }
-        } else if (win) {
-            String s = "CONGRATULATIONS!";
-            font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
-            s = "FINAL SCORE: " + score;
-            font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2 + 75);
-        } else if (lose) {
-            String s = "GAME OVER";
-            font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
-            s = "FINAL SCORE: " + score;
-            font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2 + 75);
-        } else if (levelUp) {
-            if (levelUpCounter < 20) {
-                String s = "LEVEL-UP!";
+        String s;
+        switch (state) {
+            case NOT_STARTED:
+                s = "PRESS SPACE TO START";
                 font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
-            } else if (levelUpCounter == 20) {
-                level = 1;
-                background = new Image("res/level-1/background.png");
-                bird = new Bird(200, 350, level, LEVEL1_MAX_LIFE);
-                pipes = new LinkedList<>();
-                weapons = new LinkedList<>();
-                score = 0;
-            } else {
-                String s = "PRESS SPACE TO START";
-                font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
-                s = "PRESS 'S' TO SHOOT";
-                font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2 + 68);
                 if (input.wasPressed(Keys.SPACE)) {
-                    levelUp = false;
+                    state = State.LEVEL;
                 }
-            }
-            levelUpCounter++;
-        } else if (level == 0) {
-            // bird
-            birdBasicMove(input);
-            // pipes
-            if (input.wasPressed(Keys.K)) {
-                if (timescale > 1) {
-                    timescale--;
-                    Pipe.setStepSize(Pipe.getStepSize() * 0.5);
+                break;
+            case WIN:
+                s = "CONGRATULATIONS!";
+                font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
+                s = "FINAL SCORE: " + score;
+                font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2 + 75);
+                break;
+            case LOSE:
+                s = "GAME OVER";
+                font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
+                s = "FINAL SCORE: " + score;
+                font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2 + 75);
+                break;
+            case LEVELUP:
+                if (levelUpCounter < 20) {
+                    s = "LEVEL-UP!";
+                    font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
+                } else if (levelUpCounter == 20) {
+                    level = 1;
+                    background = new Image("res/level-1/background.png");
+                    bird = new Bird(200, 350, level, LEVEL1_MAX_LIFE);
+                    pipes = new LinkedList<>();
+                    weapons = new LinkedList<>();
+                    score = 0;
+                } else {
+                    s = "PRESS SPACE TO START";
+                    font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
+                    s = "PRESS 'S' TO SHOOT";
+                    font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2 + 68);
+                    if (input.wasPressed(Keys.SPACE)) {
+                        state = State.LEVEL;
+                    }
                 }
-            }
-            if (input.wasPressed(Keys.L)) {
-                if (timescale < 5) {
-                    timescale++;
-                    Pipe.setStepSize(Pipe.getStepSize() * 1.5);
+                levelUpCounter++;
+                break;
+            case LEVEL:
+                if (level == 0) {
+                    // bird
+                    birdBasicMove(input);
+                    // timescale control
+                    timescaleControl(input);
+                    // pipes
+                    // generate new pipe pair
+                    pipeSpawningCounter++;
+                    if (pipeSpawningCounter >= pipeSpawningInterval) {
+                        double pos = Pipe.getRandomPos(level);
+                        pipes.offer(new Pipe[] {
+                                new PlasticPipe(false, pos),
+                                new PlasticPipe(true, pos + PlasticPipe.GAP)
+                        });
+                        pipeSpawningCounter = 0;
+                    }
+                    // draw pipes and detect collision
+                    for (Pipe[] pipePair : pipes) {
+                        pipePair[0].move();
+                        pipePair[1].move();
+                        pipePair[0].draw();
+                        pipePair[1].draw();
+                        if (!pipePair[0].getCollideWithBird() && bird.collideWith(pipePair[0])) {
+                            pipePair[0].setCollideWithBird(true);
+                            bird.loseLife();
+                        }
+                        if (!pipePair[1].getCollideWithBird() && bird.collideWith(pipePair[1])) {
+                            pipePair[1].setCollideWithBird(true);
+                            bird.loseLife();
+                        }
+                        // score
+                        if (!pipePair[0].getPassedByBird() &&
+                                pipePair[0].getX() + pipePair[0].getImage().getWidth() < bird.getX()) {
+                            score++;
+                            pipePair[0].setPassedByBird(true);
+                            pipePair[1].setPassedByBird(true);
+                        }
+                    }
+                    // test if the leftmost pipes are out of screen
+                    if (pipes.peek() != null && pipes.peek()[0].isOutOfBound()) {
+                        pipes.poll();
+                    }
+                    // lose detection
+                    if (bird.getLives() <= 0) {
+                        state = State.LOSE;
+                    }
+                    // draw score
+                    font.drawString("SCORE: " + score, 100, 100);
+                    // draw life bar
+                    drawLifeBar(level);
+                } else {
+                    // bird
+                    birdBasicMove(input);
+                    // timescale control
+                    timescaleControl(input);
+                    // pipes
+                    // generate new pipe pair
+                    pipeSpawningCounter++;
+                    if (pipeSpawningCounter >= pipeSpawningInterval) {
+                        double pos = Pipe.getRandomPos(level);
+                        if (Math.random() < 0.5) {
+                            pipes.offer(new Pipe[] {
+                                    new PlasticPipe(false, pos),
+                                    new PlasticPipe(true, pos + PlasticPipe.GAP)
+                            });
+                        } else {
+                            pipes.offer(new Pipe[] {
+                                    new SteelPipe(false, pos),
+                                    new SteelPipe(true, pos + PlasticPipe.GAP)
+                            });
+                        }
+                        pipeSpawningCounter = 0;
+                    }
+                    // draw pipes and detect collision
+                    for (Pipe[] pipePair : pipes) {
+                        pipePair[0].move();
+                        pipePair[1].move();
+                        pipePair[0].draw();
+                        pipePair[1].draw();
+                        // shoot fire if it is steel pipe
+                        if (pipePair[0] instanceof SteelPipe) {
+
+                        }
+                        // collision
+                        if (!pipePair[0].getCollideWithBird() && bird.collideWith(pipePair[0])) {
+                            pipePair[0].setCollideWithBird(true);
+                            bird.loseLife();
+                        }
+                        if (!pipePair[1].getCollideWithBird() && bird.collideWith(pipePair[1])) {
+                            pipePair[1].setCollideWithBird(true);
+                            bird.loseLife();
+                        }
+                        // score
+                        if (!pipePair[0].getPassedByBird() &&
+                                pipePair[0].getX() + pipePair[0].getImage().getWidth() < bird.getX()) {
+                            score++;
+                            pipePair[0].setPassedByBird(true);
+                            pipePair[1].setPassedByBird(true);
+                        }
+                    }
+                    // lose detection
+                    if (bird.getLives() <= 0) {
+                        state = State.LOSE;
+                    }
+                    // draw score
+                    font.drawString("SCORE: " + score, 100, 100);
+                    // draw life bar
+                    drawLifeBar(level);
                 }
-            }
-            pipeSpawningCounter++;
-            if (pipeSpawningCounter >= pipeSpawningInterval) {
-                double pos = Pipe.getRandomPos(level);
-                pipes.offer(new Pipe[] {
-                        new PlasticPipe(false, pos),
-                        new PlasticPipe(true, pos + PlasticPipe.GAP)
-                });
-                pipeSpawningCounter = 0;
-            }
-            for (Pipe[] pipePair : pipes) {
-                pipePair[0].move();
-                pipePair[1].move();
-                pipePair[0].draw();
-                pipePair[1].draw();
-                if (!pipePair[0].getCollideWithBird() && bird.collideWith(pipePair[0])) {
-                    pipePair[0].setCollideWithBird(true);
-                    bird.loseLife();
-                }
-                if (!pipePair[1].getCollideWithBird() && bird.collideWith(pipePair[1])) {
-                    pipePair[1].setCollideWithBird(true);
-                    bird.loseLife();
-                }
-                // score
-                if (!pipePair[0].getPassedByBird() &&
-                        pipePair[0].getX() + pipePair[0].getImage().getWidth() < bird.getX()) {
-                    score++;
-                    pipePair[0].setPassedByBird(true);
-                    pipePair[1].setPassedByBird(true);
-                }
-            }
-            // test if the leftmost pipes are out of screen
-            if (pipes.peek() != null && pipes.peek()[0].isOutOfBound()) {
-                pipes.poll();
-            }
-            // lose detection
-            if (bird.getLives() <= 0) {
-                win = false;
-                lose = true;
-            }
-            // draw score
-            font.drawString("SCORE: " + score, 100, 100);
-            // draw life bar
-            drawLifeBar(level);
-        } else if (level == 1) {
-            // bird
-            birdBasicMove(input);
-            // lose detection
-            if (bird.getLives() <= 0) {
-                win = false;
-                lose = true;
-            }
-            // draw score
-            font.drawString("SCORE: " + score, 100, 100);
-            // draw life bar
-            drawLifeBar(level);
+                break;
         }
     }
 
@@ -214,6 +258,21 @@ public class ShadowFlap extends AbstractGame {
         if (bird.isOutOfBound()) {
             bird.loseLife();
             bird.setY(350);
+        }
+    }
+
+    private void timescaleControl(Input input) {
+        if (input.wasPressed(Keys.K)) {
+            if (timescale > 1) {
+                timescale--;
+                Pipe.setStepSize(Pipe.getStepSize() * 0.5);
+            }
+        }
+        if (input.wasPressed(Keys.L)) {
+            if (timescale < 5) {
+                timescale++;
+                Pipe.setStepSize(Pipe.getStepSize() * 1.5);
+            }
         }
     }
 }
