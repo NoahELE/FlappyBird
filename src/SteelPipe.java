@@ -20,13 +20,11 @@ public class SteelPipe extends Pipe {
             flame = new Flame(this);
             flameCounter = 0;
         }
+        if (flame != null && flame.getExistCounter() == 3) {
+            flame = null;
+        }
         if (flame != null) {
             flame.setX(flame.getX() - Pipe.getStepSize());
-            if (upright) {
-                flame.setY(flame.getY() - 5);
-            } else {
-                flame.setY(flame.getY() + 5);
-            }
             flame.draw();
         }
     }

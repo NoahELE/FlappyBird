@@ -265,7 +265,7 @@ public class ShadowFlap extends AbstractGame {
         if (input.wasPressed(Keys.K)) {
             if (timescale > 1) {
                 timescale--;
-                Pipe.setStepSize(Pipe.getStepSize() * 0.5);
+                Pipe.setStepSize(Pipe.getStepSize() / 1.5);
             }
         }
         if (input.wasPressed(Keys.L)) {

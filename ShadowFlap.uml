@@ -23,7 +23,7 @@ class ShadowFlap {
 	+ main(args: String[]) {static}
 }
 
-abstarct class Pipe {
+abstract class Pipe {
     - GAP: int {static}
     - stepSize: int {static}
 	- image: Image
