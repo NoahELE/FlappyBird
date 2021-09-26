@@ -18,6 +18,7 @@ public class SteelPipe extends Pipe {
         flameCounter++;
         if (flameCounter == 20) {
             flame = new Flame(this);
+            flameCounter = 0;
         }
         if (flame != null) {
             flame.setX(flame.getX() - Pipe.getStepSize());
