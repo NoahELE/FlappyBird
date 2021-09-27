@@ -69,10 +69,6 @@ public class Bird {
         return y < -image.getHeight() || y > ShadowFlap.HEIGHT;
     }
 
-    public boolean collideWith(Pipe pipe) {
-        return getRect().intersects(pipe.getRect());
-    }
-
     public void loseLife() {
         lives--;
     }

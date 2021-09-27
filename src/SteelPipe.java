@@ -16,16 +16,24 @@ public class SteelPipe extends Pipe {
     public void draw() {
         super.draw();
         flameCounter++;
-        if (flameCounter == 20) {
+        if (flameCounter == 20 + Flame.lifeLength) {
             flame = new Flame(this);
             flameCounter = 0;
         }
-        if (flame != null && flame.getExistCounter() == 3) {
+        if (flame != null && flame.getExistCounter() == Flame.lifeLength) {
             flame = null;
         }
         if (flame != null) {
-            flame.setX(flame.getX() - Pipe.getStepSize());
+            flame.setX(flame.getX() - Pipe.stepSize);
             flame.draw();
         }
+    }
+
+    @Override
+    public boolean collideWith(Bird bird) {
+        if (getRect().intersects(bird.getRect())) {
+            return true;
+        }
+        return flame != null && flame.getRect().intersects(bird.getRect());
     }
 }

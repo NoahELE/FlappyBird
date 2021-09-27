@@ -3,10 +3,10 @@ import bagel.util.Point;
 import bagel.util.Rectangle;
 
 public abstract class Weapon {
-    protected double x;
-    protected final double y;
-    protected static final double MOVE_SPEED = PlasticPipe.getStepSize();
+    protected static final double MOVE_SPEED = Pipe.stepSize;
     protected static final double SHOOT_SPEED = 5;
+    protected double y;
+    protected double x;
     protected Image image;
 
     public Weapon(double y) {
@@ -20,6 +20,10 @@ public abstract class Weapon {
 
     public void move() {
         x -= MOVE_SPEED;
+    }
+
+    public void draw() {
+        image.drawFromTopLeft(x, y);
     }
 
     public void shoot() {

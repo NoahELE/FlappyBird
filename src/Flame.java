@@ -1,15 +1,20 @@
+import bagel.DrawOptions;
 import bagel.Image;
+import bagel.util.Point;
+import bagel.util.Rectangle;
 
 public class Flame {
+    public static final int lifeLength = 120;
     private final Image image = new Image("res/level-1/flame.png");
+    private final boolean upright;
     private double x;
     private double y;
     private int existCounter;
-    private static final int lifeLength = 3;
 
     public Flame(Pipe pipe) {
         this.x = pipe.getX();
-        if (pipe.upright) {
+        this.upright = pipe.upright;
+        if (upright) {
             this.y = pipe.getY() - image.getHeight();
         } else {
             this.y = pipe.getY() + pipe.getImage().getHeight();
@@ -18,7 +23,11 @@ public class Flame {
     }
 
     public void draw() {
-        image.drawFromTopLeft(x, y);
+        DrawOptions opt = new DrawOptions();
+        if (upright) {
+            opt.setRotation(Math.PI);
+        }
+        image.drawFromTopLeft(x, y, opt);
         existCounter++;
     }
 
@@ -40,5 +49,9 @@ public class Flame {
 
     public int getExistCounter() {
         return existCounter;
+    }
+
+    public Rectangle getRect() {
+        return image.getBoundingBoxAt(new Point(x + image.getWidth() / 2, y + image.getHeight() / 2));
     }
 }

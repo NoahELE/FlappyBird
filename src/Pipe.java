@@ -3,11 +3,9 @@ import bagel.Image;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
-import java.util.IllegalFormatWidthException;
-
 public abstract class Pipe {
     public static final int GAP = 168;
-    protected static double stepSize = 3;
+    public static double stepSize = 3;
     protected final boolean upright;
     protected double x;
     protected boolean passedByBird;
@@ -59,6 +57,10 @@ public abstract class Pipe {
         return y;
     }
 
+    public boolean collideWith(Bird bird) {
+        return getRect().intersects(bird.getRect());
+    }
+
     public boolean getCollideWithBird() {
         return collideWithBird;
     }
@@ -73,14 +75,6 @@ public abstract class Pipe {
 
     public void setPassedByBird(boolean passedByBird) {
         this.passedByBird = passedByBird;
-    }
-
-    public static double getStepSize() {
-        return stepSize;
-    }
-
-    public static void setStepSize(double stepSize) {
-        Pipe.stepSize = stepSize;
     }
 
     public Rectangle getRect() {

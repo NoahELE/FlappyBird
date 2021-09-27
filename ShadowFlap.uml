@@ -17,8 +17,6 @@ class ShadowFlap {
 	- started: boolean
 	- birdPassPipe: boolean
 
-	+ ShadowFlap()
-
 	- update()
 	+ main(args: String[]) {static}
 }
@@ -34,29 +32,16 @@ abstract class Pipe {
 	- passedByBird: boolean
 	- collideWithBird: boolean
 
-	+ Pipe(upright: boolean, height: double, type: int)
-
 	+ getRandomPos(): double {static}
 	+ draw()
 	+ move()
 	+ isOutOfBound(): boolean
-	+ getImage(): Image
-	+ getX(): double
-	+ getCollideWithBird(): boolean
-	+ setCollideWithBird(collideWithBird: boolean)
-	+ getPassedByBird(): boolean
-	+ setPassedByBird(passedByBird: boolean)
-	+ getStepSize(): double {static}
-	+ setStepSize(stepSize: double)
-	+ getRect(): Rectangle
 }
 
 class PlasticPipe extends Pipe {}
 
 class SteelPipe extends Pipe {
 	- flameCounter: int
-
-	+ SteelPipe(upright: boolean, height: double)
 
 	+ shootFlame()
 }
@@ -65,8 +50,6 @@ class Flame {
 	- image: Image
 	- speed: double
 	- upward: boolean
-
-	+ Flame()
 
 	- move()
 	- isOutofBorder(): boolean
@@ -83,8 +66,6 @@ class Bird {
 	- speed: double
 	- lives: int
 
-	+ Bird(x: double, y: double, level: int, lives: int)
-
 	+ draw()
 	+ fall()
 	+ fly()
@@ -92,10 +73,6 @@ class Bird {
 	+ isOutOfBound(): boolean
 	+ collideWith(pipe: Pipe): boolean
 	+ loseLife()
-	+ getLives(): int
-	+ getX(): double
-	+ setY(d: double)
-	+ getRect(): Rectangle
 }
 
 abstract class Weapon {
@@ -105,12 +82,9 @@ abstract class Weapon {
 	- SHOOT_SPEED: double {static}
 	- image: Image
 
-	+ Weapon(y: double)
-
 	+ isOutOfBorder(): boolean
 	+ move()
 	+ shoot()
-	+ getRect(): Rectangle
 }
 
 class Rock extends Weapon {
@@ -121,17 +95,8 @@ class Bomb extends Weapon {
 	+ RANGE: double {static}
 }
 
-ShadowFlap ..> Bird
-ShadowFlap ..> Pipe
-Bird ..> ShadowFlap
-Pipe ..> ShadowFlap
-Bird ..> Pipe
-Pipe "2" <--* "1" ShadowFlap
-Bird "1" <--* "1" ShadowFlap
-ShadowFlap ..> Weapon
-Weapon ..> ShadowFlap
-Weapon "n" <--* "1" ShadowFlap
-Weapon ..> Bird
-SteelPipe ..> Flame
-Flame "0..n" <--* "1" ShadowFlap
+Pipe "2" <-- "1" ShadowFlap
+Bird "1" <-- "1" ShadowFlap
+Weapon "n" <-- "1" ShadowFlap
+Flame "0..n" <-- "1" ShadowFlap
 @enduml
