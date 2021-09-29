@@ -10,9 +10,9 @@ public abstract class Pipe {
     protected double x;
     protected boolean passedByBird;
     protected boolean collideWithBird;
+    protected boolean destroyed;
     protected Image image;
     protected double y;
-
 
     public Pipe(boolean upright) {
         this.upright = upright;
@@ -47,6 +47,10 @@ public abstract class Pipe {
             opt.setRotation(Math.PI);
         }
         image.drawFromTopLeft(x, y, opt);
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
     }
 
     public double getX() {
@@ -89,5 +93,9 @@ public abstract class Pipe {
         return this.x < -image.getWidth();
     }
 
-    public abstract boolean collideWithWeapon(Weapon weapon);
+    public boolean collideWithWeapon(Weapon weapon) {
+        return getRect().intersects(weapon.getRect());
+    }
+
+    public abstract void getHit(Weapon weapon);
 }

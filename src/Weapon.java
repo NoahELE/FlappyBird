@@ -60,6 +60,10 @@ public abstract class Weapon {
         return state == State.UNUSED;
     }
 
+    public void setUnused() {
+        state = State.UNUSED;
+    }
+
     public Rectangle getRect() {
         return image.getBoundingBoxAt(new Point(x + image.getWidth() / 2, y + image.getHeight() / 2));
     }

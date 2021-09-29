@@ -145,6 +145,13 @@ public class ShadowFlap extends AbstractGame {
                         Weapon weapon = weapons.get(i);
                         weapon.move(bird, input);
                         weapon.draw();
+                        for (Pipe[] pipePair : pipes) {
+                            if (pipePair[0].collideWithWeapon(weapon) || pipePair[1].collideWithWeapon(weapon)) {
+                                pipePair[0].getHit(weapon);
+                                pipePair[1].getHit(weapon);
+                                weapon.setUnused();
+                            }
+                        }
                         // delete if out of border or unused
                         if (weapon.isOutOfBorder() || weapon.isUnused()) {
                             weapons.remove(i);
@@ -206,7 +213,7 @@ public class ShadowFlap extends AbstractGame {
                 pipePair[1].setPassedByBird(true);
             }
             // test if the pipes are out of screen
-            if (pipePair[0].isOutOfBound()) {
+            if (pipePair[0].isOutOfBound() || pipePair[0].isDestroyed()) {
                 pipes.remove(i);
             }
         }
