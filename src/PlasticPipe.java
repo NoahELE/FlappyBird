@@ -6,4 +6,8 @@ public class PlasticPipe extends Pipe {
         image = new Image("res/level/plasticPipe.png");
         y = upright ? height : (height - image.getHeight());
     }
+
+    public boolean collideWithWeapon(Weapon weapon) {
+        return getRect().intersects(weapon.getRect());
+    }
 }

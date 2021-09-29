@@ -88,4 +88,6 @@ public abstract class Pipe {
     public boolean isOutOfBound() {
         return this.x < -image.getWidth();
     }
+
+    public abstract boolean collideWithWeapon(Weapon weapon);
 }

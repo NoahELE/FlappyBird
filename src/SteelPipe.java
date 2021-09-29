@@ -36,4 +36,11 @@ public class SteelPipe extends Pipe {
         }
         return flame != null && flame.getRect().intersects(bird.getRect());
     }
+
+    public boolean collideWithWeapon(Weapon weapon) {
+        if (weapon instanceof Rock) {
+            return false;
+        }
+        return getRect().intersects(weapon.getRect());
+    }
 }

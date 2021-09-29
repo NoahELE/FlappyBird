@@ -4,7 +4,7 @@ import bagel.util.Point;
 import bagel.util.Rectangle;
 
 public class Flame {
-    public static final int lifeLength = 120;
+    public static final int lifeLength = 20;
     private final Image image = new Image("res/level-1/flame.png");
     private final boolean upright;
     private double x;

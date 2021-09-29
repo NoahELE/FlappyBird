@@ -57,12 +57,12 @@ public class Bird {
         y += speed;
     }
 
-    public boolean touchWeapon(Weapon weapon) {
-        if (getRect().intersects(weapon.getRect())) {
-            this.weapon = weapon;
-            return true;
-        }
-        return false;
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
     }
 
     public boolean isOutOfBound() {
@@ -79,6 +79,10 @@ public class Bird {
 
     public double getX() {
         return x;
+    }
+
+    public double getY() {
+        return y;
     }
 
     public void setY(double d) {
