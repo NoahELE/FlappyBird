@@ -5,8 +5,8 @@ import bagel.util.Point;
 import bagel.util.Rectangle;
 
 public abstract class Weapon {
-    protected static final double MOVE_SPEED = Pipe.stepSize;
     protected static final double SHOOT_SPEED = 5;
+    protected static double stepSize = Pipe.stepSize;
     protected double y;
     protected double x;
     protected Image image;
@@ -36,7 +36,7 @@ public abstract class Weapon {
         }
         switch (state) {
             case UNCAUGHT:
-                x -= MOVE_SPEED;
+                x -= stepSize;
                 break;
             case WITH_BIRD:
                 x = bird.getX() + image.getWidth();

@@ -12,8 +12,8 @@ import java.util.LinkedList;
 public class ShadowFlap extends AbstractGame {
     public static final int WIDTH = 1024;
     public static final int HEIGHT = 768;
-    public final int LEVEL0_MAX_SCORE = 1;
-    public final int LEVEL1_MAX_SCORE = 20;
+    public final int LEVEL0_MAX_SCORE = 10;
+    public final int LEVEL1_MAX_SCORE = 30;
     public final int LEVEL0_MAX_LIFE = 3;
     public final int LEVEL1_MAX_LIFE = 10;
     private final Image fullLife = new Image("res/level/fullLife.png");
@@ -100,7 +100,7 @@ public class ShadowFlap extends AbstractGame {
                     pipes = new LinkedList<>();
                     weapons = new LinkedList<>();
                     score = 0;
-                    weaponSpawningCounter = weaponSpawningInterval / 4  ;
+                    weaponSpawningCounter = weaponSpawningInterval / 4;
                 } else {
                     s = "PRESS SPACE TO START";
                     font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
@@ -141,7 +141,7 @@ public class ShadowFlap extends AbstractGame {
                         weaponSpawningCounter = 0;
                     }
                     // move the weapons
-                    for (int i = weapons.size() - 1; i >=0 ; i--) {
+                    for (int i = weapons.size() - 1; i >= 0; i--) {
                         Weapon weapon = weapons.get(i);
                         weapon.move(bird, input);
                         weapon.draw();
@@ -150,6 +150,10 @@ public class ShadowFlap extends AbstractGame {
                                 pipePair[0].getHit(weapon);
                                 pipePair[1].getHit(weapon);
                                 weapon.setUnused();
+                                // check whether add score
+                                if (weapon instanceof Bomb || pipePair[0] instanceof PlasticPipe) {
+                                    score++;
+                                }
                             }
                         }
                         // delete if out of border or unused
@@ -251,12 +255,14 @@ public class ShadowFlap extends AbstractGame {
             if (timescale > 1) {
                 timescale--;
                 Pipe.stepSize /= 1.5;
+                Weapon.stepSize /= 1.5;
             }
         }
         if (input.wasPressed(Keys.L)) {
             if (timescale < 5) {
                 timescale++;
                 Pipe.stepSize *= 1.5;
+                Weapon.stepSize *= 1.5;
             }
         }
     }
