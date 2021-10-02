@@ -6,7 +6,7 @@ import bagel.util.Rectangle;
 
 public abstract class Weapon {
     protected static final double SHOOT_SPEED = 5;
-    protected static double stepSize = Pipe.stepSize;
+    protected static double stepSize = 3;
     protected double y;
     protected double x;
     protected Image image;

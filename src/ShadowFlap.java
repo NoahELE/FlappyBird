@@ -15,7 +15,7 @@ public class ShadowFlap extends AbstractGame {
     public final int LEVEL0_MAX_SCORE = 10;
     public final int LEVEL1_MAX_SCORE = 30;
     public final int LEVEL0_MAX_LIFE = 3;
-    public final int LEVEL1_MAX_LIFE = 10;
+    public final int LEVEL1_MAX_LIFE = 6;
     private final Image fullLife = new Image("res/level/fullLife.png");
     private final Image noLife = new Image("res/level/noLife.png");
     private final Font font = new Font("res/font/slkscr.ttf", 48);
