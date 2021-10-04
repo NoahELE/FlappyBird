@@ -5,7 +5,7 @@ import bagel.util.Rectangle;
 
 public abstract class Pipe {
     public static final int GAP = 168;
-    public static double stepSize = 3;
+    public static double stepSize = 5;
     protected final boolean upright;
     protected double x;
     protected boolean passedByBird;

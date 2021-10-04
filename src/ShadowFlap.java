@@ -12,7 +12,7 @@ import java.util.LinkedList;
 public class ShadowFlap extends AbstractGame {
     public static final int WIDTH = 1024;
     public static final int HEIGHT = 768;
-    public final int LEVEL0_MAX_SCORE = 10;
+    public final int LEVEL0_MAX_SCORE = 1;
     public final int LEVEL1_MAX_SCORE = 30;
     public final int LEVEL0_MAX_LIFE = 3;
     public final int LEVEL1_MAX_LIFE = 6;
@@ -90,10 +90,10 @@ public class ShadowFlap extends AbstractGame {
                 font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2 + 75);
                 break;
             case LEVELUP:
-                if (levelUpCounter < 20) {
+                if (levelUpCounter < 150) {
                     s = "LEVEL-UP!";
                     font.drawString(s, (WIDTH - font.getWidth(s)) / 2, (double) HEIGHT / 2);
-                } else if (levelUpCounter == 20) {
+                } else if (levelUpCounter == 150) {
                     level = 1;
                     background = new Image("res/level-1/background.png");
                     bird = new Bird(200, 350, level, LEVEL1_MAX_LIFE);

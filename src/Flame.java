@@ -4,7 +4,7 @@ import bagel.util.Point;
 import bagel.util.Rectangle;
 
 public class Flame {
-    public static final int lifeLength = 20;
+    public static final int lifeLength = 30;
     private final Image image = new Image("res/level-1/flame.png");
     private final boolean upright;
     private double x;
@@ -15,9 +15,9 @@ public class Flame {
         this.x = pipe.getX();
         this.upright = pipe.upright;
         if (upright) {
-            this.y = pipe.getY() - image.getHeight();
+            this.y = pipe.getY() - image.getHeight() - 10;
         } else {
-            this.y = pipe.getY() + pipe.getImage().getHeight();
+            this.y = pipe.getY() + pipe.getImage().getHeight() + 10;
         }
         existCounter = 0;
     }
