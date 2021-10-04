@@ -9,6 +9,7 @@ public abstract class Weapon {
     protected static double stepSize = 5;
     protected double y;
     protected double x;
+    protected int existCounter = 0;
     protected Image image;
     protected State state;
 
@@ -44,6 +45,7 @@ public abstract class Weapon {
                 break;
             case SHOT:
                 x += SHOOT_SPEED;
+                checkRange();
                 break;
         }
     }
@@ -67,6 +69,8 @@ public abstract class Weapon {
     public Rectangle getRect() {
         return image.getBoundingBoxAt(new Point(x + image.getWidth() / 2, y + image.getHeight() / 2));
     }
+
+    protected abstract void checkRange();
 
     enum State {
         UNCAUGHT, WITH_BIRD, SHOT, UNUSED

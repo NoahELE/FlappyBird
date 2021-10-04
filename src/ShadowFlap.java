@@ -12,7 +12,7 @@ import java.util.LinkedList;
 public class ShadowFlap extends AbstractGame {
     public static final int WIDTH = 1024;
     public static final int HEIGHT = 768;
-    public final int LEVEL0_MAX_SCORE = 1;
+    public final int LEVEL0_MAX_SCORE = 10;
     public final int LEVEL1_MAX_SCORE = 30;
     public final int LEVEL0_MAX_LIFE = 3;
     public final int LEVEL1_MAX_LIFE = 6;
@@ -146,7 +146,8 @@ public class ShadowFlap extends AbstractGame {
                         weapon.move(bird, input);
                         weapon.draw();
                         for (Pipe[] pipePair : pipes) {
-                            if (pipePair[0].collideWithWeapon(weapon) || pipePair[1].collideWithWeapon(weapon)) {
+                            if (weapon.state == Weapon.State.SHOT &&
+                                    (pipePair[0].collideWithWeapon(weapon) || pipePair[1].collideWithWeapon(weapon))) {
                                 pipePair[0].getHit(weapon);
                                 pipePair[1].getHit(weapon);
                                 weapon.setUnused();
