@@ -11,7 +11,7 @@ public abstract class Pipe {
     protected boolean passedByBird;
     protected boolean collideWithBird;
     protected boolean destroyed;
-    protected Image image;
+    protected final Image image = setImage();
     protected double y;
 
     public Pipe(boolean upright) {
@@ -98,4 +98,6 @@ public abstract class Pipe {
     }
 
     public abstract void getHit(Weapon weapon);
+
+    protected abstract Image setImage();
 }

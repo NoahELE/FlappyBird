@@ -10,7 +10,7 @@ public abstract class Weapon {
     protected double y;
     protected double x;
     protected int existCounter = 0;
-    protected Image image;
+    protected final Image image = setImage();
     protected State state;
 
     public Weapon(double y) {
@@ -71,6 +71,8 @@ public abstract class Weapon {
     }
 
     protected abstract void checkRange();
+
+    protected abstract Image setImage();
 
     enum State {
         UNCAUGHT, WITH_BIRD, SHOT, UNUSED
