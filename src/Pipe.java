@@ -7,13 +7,18 @@ public abstract class Pipe {
     public static final int GAP = 168;
     public static double stepSize = 5;
     protected final boolean upright;
+    protected final Image image = setImage();
     protected double x;
     protected boolean passedByBird;
     protected boolean collideWithBird;
     protected boolean destroyed;
-    protected final Image image = setImage();
     protected double y;
 
+    /**
+     * initialise a pipe with direction
+     *
+     * @param upright whether the pipe is upright or downward
+     */
     public Pipe(boolean upright) {
         this.upright = upright;
         x = ShadowFlap.WIDTH;
@@ -21,6 +26,12 @@ public abstract class Pipe {
         collideWithBird = false;
     }
 
+    /**
+     * get a random position to create pipes
+     *
+     * @param level the level number
+     * @return the generated random position
+     */
     public static double getRandomPos(int level) {
         // generate random position for pipe pair for different level
         if (level == 0) {
@@ -37,10 +48,16 @@ public abstract class Pipe {
         }
     }
 
+    /**
+     * move the pipe
+     */
     public void move() {
         x -= stepSize;
     }
 
+    /**
+     * draw the pipe
+     */
     public void draw() {
         DrawOptions opt = new DrawOptions();
         if (upright) {
@@ -61,6 +78,11 @@ public abstract class Pipe {
         return y;
     }
 
+    /**
+     * test whether the pipe collide with the bird
+     * @param bird the bird
+     * @return true if there is collision and vice versa
+     */
     public boolean collideWith(Bird bird) {
         return getRect().intersects(bird.getRect());
     }
@@ -81,6 +103,10 @@ public abstract class Pipe {
         this.passedByBird = passedByBird;
     }
 
+    /**
+     * get the Rectangle of the image at the coordinate
+     * @return Rectangle with right coordinate
+     */
     public Rectangle getRect() {
         return image.getBoundingBoxAt(new Point(x + image.getWidth() / 2, y + image.getHeight() / 2));
     }
@@ -89,14 +115,27 @@ public abstract class Pipe {
         return image;
     }
 
+    /**
+     * check if the pipe is out of the window
+     * @return true if the pipe is out of window
+     */
     public boolean isOutOfBound() {
         return this.x < -image.getWidth();
     }
 
+    /**
+     * check if the weapon hits the pipe
+     * @param weapon the weapon to be tested
+     * @return true if the weapon hits the pipe
+     */
     public boolean collideWithWeapon(Weapon weapon) {
         return getRect().intersects(weapon.getRect());
     }
 
+    /**
+     * change the state after hit by weapon
+     * @param weapon the weapon hits the pipe
+     */
     public abstract void getHit(Weapon weapon);
 
     protected abstract Image setImage();

@@ -11,6 +11,10 @@ public class Flame {
     private double y;
     private int existCounter;
 
+    /**
+     * create a flame
+     * @param pipe the pipe that the flame belongs to
+     */
     public Flame(Pipe pipe) {
         this.x = pipe.getX();
         this.upright = pipe.upright;
@@ -22,6 +26,9 @@ public class Flame {
         existCounter = 0;
     }
 
+    /**
+     * draw the flame
+     */
     public void draw() {
         DrawOptions opt = new DrawOptions();
         if (upright) {
@@ -37,14 +44,6 @@ public class Flame {
 
     public void setX(double x) {
         this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
     }
 
     public int getExistCounter() {

@@ -4,6 +4,11 @@ public class SteelPipe extends Pipe {
     private int flameCounter;
     private Flame flame;
 
+    /**
+     * create a steel pipe
+     * @param upright the direction of the pipe
+     * @param height the height of the pipe
+     */
     public SteelPipe(boolean upright, double height) {
         super(upright);
         y = upright ? height : (height - image.getHeight());

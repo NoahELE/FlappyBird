@@ -33,6 +33,9 @@ public class ShadowFlap extends AbstractGame {
     private int timescale = 1;
     private int weaponSpawningCounter;
 
+    /**
+     * initialise the game
+     */
     public ShadowFlap() {
         super(WIDTH, HEIGHT, "ShadowFlap");
         background = new Image("res/level-0/background.png");
@@ -132,7 +135,7 @@ public class ShadowFlap extends AbstractGame {
                     // generate weapons
                     weaponSpawningCounter++;
                     if (weaponSpawningCounter >= weaponSpawningInterval) {
-                        double pos = Math.random() * HEIGHT;
+                        double pos = Pipe.getRandomPos(level);
                         if (Math.random() < 0.5) {
                             weapons.offer(new Rock(pos));
                         } else {

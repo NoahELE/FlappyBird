@@ -13,6 +13,13 @@ public class Bird {
     private int lives;
     private Weapon weapon = null;
 
+    /**
+     * create a bird
+     * @param x the start x coordinate
+     * @param y the start y coordinate
+     * @param level the level that the game is in
+     * @param lives the lives that the bird will have
+     */
     public Bird(double x, double y, int level, int lives) {
         this.x = x;
         this.y = y;
@@ -29,6 +36,9 @@ public class Bird {
         speed = 0;
     }
 
+    /**
+     * draw the bird
+     */
     public void draw() {
         wingCounter++;
         if (wingCounter == 10) {
@@ -42,6 +52,9 @@ public class Bird {
         image.draw(x, y);
     }
 
+    /**
+     * make the bird fall
+     */
     public void fall() {
         speed += 0.4;
         if (speed >= 10) {
@@ -49,10 +62,16 @@ public class Bird {
         }
     }
 
+    /**
+     * make the bird fly
+     */
     public void fly() {
         speed = -6;
     }
 
+    /**
+     * make the bird move
+     */
     public void move() {
         y += speed;
     }
@@ -65,10 +84,17 @@ public class Bird {
         this.weapon = weapon;
     }
 
+    /**
+     * check if the bird is out of window
+     * @return true if the bird is out of window and vice versa
+     */
     public boolean isOutOfBound() {
         return y < -image.getHeight() || y > ShadowFlap.HEIGHT;
     }
 
+    /**
+     * lose a life
+     */
     public void loseLife() {
         lives--;
     }
