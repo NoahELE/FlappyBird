@@ -84,7 +84,9 @@ public abstract class Pipe {
      * @return true if there is collision and vice versa
      */
     public boolean collideWith(Bird bird) {
-        return getRect().intersects(bird.getRect());
+        boolean res = getRect().intersects(bird.getRect());
+        if (res) destroyed = true;
+        return res;
     }
 
     public boolean getCollideWithBird() {
