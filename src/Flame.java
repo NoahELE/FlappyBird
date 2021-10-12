@@ -38,18 +38,38 @@ public class Flame {
         existCounter++;
     }
 
+    /**
+     * Gets x.
+     *
+     * @return the x
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * Sets x.
+     *
+     * @param x the x
+     */
     public void setX(double x) {
         this.x = x;
     }
 
+    /**
+     * Gets exist counter.
+     *
+     * @return the exist counter
+     */
     public int getExistCounter() {
         return existCounter;
     }
 
+    /**
+     * Gets rect.
+     *
+     * @return the rect
+     */
     public Rectangle getRect() {
         return image.getBoundingBoxAt(new Point(x + image.getWidth() / 2, y + image.getHeight() / 2));
     }

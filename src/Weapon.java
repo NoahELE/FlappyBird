@@ -94,6 +94,11 @@ public abstract class Weapon {
         state = State.UNUSED;
     }
 
+    /**
+     * Gets rect.
+     *
+     * @return the rect
+     */
     public Rectangle getRect() {
         return image.getBoundingBoxAt(new Point(x + image.getWidth() / 2, y + image.getHeight() / 2));
     }
@@ -103,6 +108,11 @@ public abstract class Weapon {
      */
     protected abstract void checkRange();
 
+    /**
+     * Sets image.
+     *
+     * @return the image
+     */
     protected abstract Image setImage();
 
     enum State {

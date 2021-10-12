@@ -76,10 +76,20 @@ public class Bird {
         y += speed;
     }
 
+    /**
+     * Gets weapon.
+     *
+     * @return the weapon
+     */
     public Weapon getWeapon() {
         return weapon;
     }
 
+    /**
+     * Sets weapon.
+     *
+     * @param weapon the weapon
+     */
     public void setWeapon(Weapon weapon) {
         this.weapon = weapon;
     }
@@ -99,22 +109,47 @@ public class Bird {
         lives--;
     }
 
+    /**
+     * Gets lives.
+     *
+     * @return the lives
+     */
     public int getLives() {
         return lives;
     }
 
+    /**
+     * Gets x.
+     *
+     * @return the x
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * Gets y.
+     *
+     * @return the y
+     */
     public double getY() {
         return y;
     }
 
+    /**
+     * Sets y.
+     *
+     * @param d the d
+     */
     public void setY(double d) {
         y = d;
     }
 
+    /**
+     * Gets rect.
+     *
+     * @return the rect
+     */
     public Rectangle getRect() {
         return image.getBoundingBoxAt(new Point(x + image.getWidth() / 2, y + image.getHeight() / 2));
     }

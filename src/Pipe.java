@@ -66,14 +66,29 @@ public abstract class Pipe {
         image.drawFromTopLeft(x, y, opt);
     }
 
+    /**
+     * Is destroyed boolean.
+     *
+     * @return the boolean
+     */
     public boolean isDestroyed() {
         return destroyed;
     }
 
+    /**
+     * Gets x.
+     *
+     * @return the x
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * Gets y.
+     *
+     * @return the y
+     */
     public double getY() {
         return y;
     }
@@ -89,18 +104,38 @@ public abstract class Pipe {
         return res;
     }
 
+    /**
+     * Gets collide with bird.
+     *
+     * @return the collide with bird
+     */
     public boolean getCollideWithBird() {
         return collideWithBird;
     }
 
+    /**
+     * Sets collide with bird.
+     *
+     * @param collideWithBird the collide with bird
+     */
     public void setCollideWithBird(boolean collideWithBird) {
         this.collideWithBird = collideWithBird;
     }
 
+    /**
+     * Gets passed by bird.
+     *
+     * @return the passed by bird
+     */
     public boolean getPassedByBird() {
         return passedByBird;
     }
 
+    /**
+     * Sets passed by bird.
+     *
+     * @param passedByBird the passed by bird
+     */
     public void setPassedByBird(boolean passedByBird) {
         this.passedByBird = passedByBird;
     }
@@ -113,6 +148,11 @@ public abstract class Pipe {
         return image.getBoundingBoxAt(new Point(x + image.getWidth() / 2, y + image.getHeight() / 2));
     }
 
+    /**
+     * Gets image.
+     *
+     * @return the image
+     */
     public Image getImage() {
         return image;
     }
@@ -140,5 +180,10 @@ public abstract class Pipe {
      */
     public abstract void getHit(Weapon weapon);
 
+    /**
+     * Sets image.
+     *
+     * @return the image
+     */
     protected abstract Image setImage();
 }
