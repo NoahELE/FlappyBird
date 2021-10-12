@@ -95,6 +95,7 @@ public abstract class Pipe {
 
     /**
      * test whether the pipe collide with the bird
+     *
      * @param bird the bird
      * @return true if there is collision and vice versa
      */
@@ -158,7 +159,8 @@ public abstract class Pipe {
     }
 
     /**
-     * check if the pipe is out of the window
+     * Check if the pipe is out of the window
+     *
      * @return true if the pipe is out of window
      */
     public boolean isOutOfBound() {
@@ -166,7 +168,8 @@ public abstract class Pipe {
     }
 
     /**
-     * check if the weapon hits the pipe
+     * Check if the weapon hits the pipe
+     *
      * @param weapon the weapon to be tested
      * @return true if the weapon hits the pipe
      */
@@ -175,7 +178,8 @@ public abstract class Pipe {
     }
 
     /**
-     * change the state after hit by weapon
+     * Change the state after hit by weapon
+     *
      * @param weapon the weapon hits the pipe
      */
     public abstract void getHit(Weapon weapon);

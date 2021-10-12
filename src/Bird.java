@@ -15,6 +15,7 @@ public class Bird {
 
     /**
      * create a bird
+     *
      * @param x the start x coordinate
      * @param y the start y coordinate
      * @param level the level that the game is in
@@ -96,6 +97,7 @@ public class Bird {
 
     /**
      * check if the bird is out of window
+     *
      * @return true if the bird is out of window and vice versa
      */
     public boolean isOutOfBound() {

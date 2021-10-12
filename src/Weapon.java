@@ -15,6 +15,7 @@ public abstract class Weapon {
 
     /**
      * create a weapon
+     *
      * @param y the y coordinate that weapon is spawned
      */
     public Weapon(double y) {
@@ -25,6 +26,7 @@ public abstract class Weapon {
 
     /**
      * check if the weapon is out of window
+     *
      * @return true if the weapon is out of window and vice versa
      */
     public boolean isOutOfBorder() {
@@ -33,6 +35,7 @@ public abstract class Weapon {
 
     /**
      * make the weapon move and check its relationship with bird and input
+     *
      * @param bird the bird that might catch the weapon
      * @param input check whether to shoot the weapon
      */
@@ -72,6 +75,7 @@ public abstract class Weapon {
 
     /**
      * check if the bird catches the weapon
+     *
      * @param bird the bird of the game
      * @return true if bird hits the weapon
      */
@@ -81,6 +85,7 @@ public abstract class Weapon {
 
     /**
      * check if the state of the weapon is unused
+     *
      * @return true of the state is unused
      */
     public boolean isUnused() {

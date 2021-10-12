@@ -6,6 +6,7 @@ public class SteelPipe extends Pipe {
 
     /**
      * create a steel pipe
+     *
      * @param upright the direction of the pipe
      * @param height the height of the pipe
      */

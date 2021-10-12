@@ -197,6 +197,7 @@ public class ShadowFlap extends AbstractGame {
     }
 
     private void pipeBasicMove() {
+        // traverse the pipes in reverse order
         for (int i = pipes.size() - 1; i >= 0; i--) {
             Pipe[] pipePair = pipes.get(i);
             pipePair[0].move();
@@ -231,10 +232,12 @@ public class ShadowFlap extends AbstractGame {
         double startX = 100;
         double maxLife = level == 0 ? LEVEL0_MAX_LIFE : LEVEL1_MAX_LIFE;
         double lifeWidth = fullLife.getWidth();
+        // draw full lives
         for (int i = 0; i < bird.getLives(); i++) {
             fullLife.drawFromTopLeft(startX, 15);
             startX += 50 + lifeWidth;
         }
+        // draw empty lives
         for (int i = 0; i < maxLife - bird.getLives(); i++) {
             noLife.drawFromTopLeft(startX, 15);
             startX += 50 + lifeWidth;
@@ -271,6 +274,7 @@ public class ShadowFlap extends AbstractGame {
         }
     }
 
+    // states of the game
     enum State {
         NOT_STARTED, WIN, LOSE, LEVELUP, LEVEL
     }

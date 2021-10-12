@@ -13,6 +13,7 @@ public class Flame {
 
     /**
      * create a flame
+     *
      * @param pipe the pipe that the flame belongs to
      */
     public Flame(Pipe pipe) {
